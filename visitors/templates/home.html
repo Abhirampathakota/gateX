@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row align-items-center justify-content-center text-center" style="min-height: 75vh;">
+    <div class="col-lg-10">
+        
+        <div class="d-inline-block mb-3 px-3 py-1 rounded-pill" style="background: rgba(79, 70, 229, 0.1); color: #4f46e5; font-weight: 600; font-size: 0.8rem; letter-spacing: 1px;">
+            AI-POWERED SECURITY v2.0
+        </div>
+        
+        <h1 class="display-1 fw-bold mb-4" style="color: #1e293b; letter-spacing: -2px; line-height: 1.1;">
+            Security verification <br>
+            <span style="background: linear-gradient(90deg, #4f46e5 0%, #9333ea 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                like never before.
+            </span>
+        </h1>
+        
+        <p class="lead mb-5 mx-auto" style="color: #475569; max-width: 650px; font-weight: 400;">
+            Get a unique, business-ready visitor management system in no time.
+            Instant QR passes, real-time watchlist scanning, and zero friction.
+        </p>
+        
+        <div class="d-flex justify-content-center gap-3">
+            <a href="/register/" class="btn btn-primary-soft">
+                Create Visitor Pass ✨
+            </a>
+            <a href="/admin/" class="btn btn-outline-soft">
+                View Dashboard
+            </a>
+        </div>
+
+    </div>
+</div>
+
+<div class="row g-4 pb-5">
+    <div class="col-md-4">
+        <div class="glass-panel p-5 h-100 border-0">
+            <div class="mb-3" style="font-size: 2rem; color: #4f46e5;"><i class="bi bi-person-badge"></i></div>
+            <h3 class="fw-bold mb-3" style="color: #1e293b;">01. Register</h3>
+            <p style="color: #475569;">Visitors enter details and upload ID in seconds using our simplified form.</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="glass-panel p-5 h-100 border-0">
+            <div class="mb-3" style="font-size: 2rem; color: #9333ea;"><i class="bi bi-qr-code-scan"></i></div>
+            <h3 class="fw-bold mb-3" style="color: #1e293b;">02. Scan</h3>
+            <p style="color: #475569;">AI instantly checks the watchlist. If safe, a unique QR code is generated.</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="glass-panel p-5 h-100 border-0">
+            <div class="mb-3" style="font-size: 2rem; color: #ec4899;"><i class="bi bi-shield-check"></i></div>
+            <h3 class="fw-bold mb-3" style="color: #1e293b;">03. Enter</h3>
+            <p style="color: #475569;">Security scans the QR at the gate. Frictionless entry, logged forever.</p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

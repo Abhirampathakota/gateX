@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="glass-panel p-4 shadow-sm">
+                <h4 class="fw-bold mb-4" style="color: #1e293b;">
+                    <i class="bi bi-plus-circle-dotted me-2"></i>Add Time Slot
+                </h4>
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="add_slot" value="1">
+                    
+                    <div class="mb-3">
+                        <label class="small fw-bold text-muted">Slot Label</label>
+                        <input type="text" name="label" class="form-control border-0 shadow-sm" placeholder="e.g. Lunch Break" required style="background: rgba(255,255,255,0.7);">
+                    </div>
+                    
+                    <div class="row g-2 mb-3">
+                        <div class="col-6">
+                            <label class="small fw-bold text-muted">Start Time</label>
+                            <input type="time" name="start_time" class="form-control border-0 shadow-sm" required style="background: rgba(255,255,255,0.7);">
+                        </div>
+                        <div class="col-6">
+                            <label class="small fw-bold text-muted">End Time</label>
+                            <input type="time" name="end_time" class="form-control border-0 shadow-sm" required style="background: rgba(255,255,255,0.7);">
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary w-100 py-2 fw-bold shadow-sm">Create Slot</button>
+                </form>
+
+                <hr class="my-4 opacity-10">
+
+                <h6 class="fw-bold text-muted mb-3">Currently Active Slots</h6>
+                <div class="list-group list-group-flush rounded-3 overflow-hidden">
+                    {% for slot in all_slots %}
+                    <div class="list-group-item border-0 mb-1 d-flex justify-content-between align-items-center" style="background: rgba(255,255,255,0.4);">
+                        <div class="small">
+                            <span class="fw-bold d-block text-dark">{{ slot.label }}</span>
+                            <span class="text-muted">{{ slot.start_time|time:"h:i A" }} - {{ slot.end_time|time:"h:i A" }}</span>
+                        </div>
+                        <span class="badge rounded-pill bg-success-soft text-success small">Active</span>
+                    </div>
+                    {% empty %}
+                    <p class="text-muted small italic">No slots created yet.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="glass-panel p-4 shadow-sm" style="min-height: 600px;">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4 class="fw-bold mb-0" style="color: #1e293b;">
+                        <i class="bi bi-lightning-charge me-2 text-warning"></i>Pending Requests
+                    </h4>
+                    <span class="badge bg-primary rounded-pill">{{ pending_requests|length }} New</span>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="text-muted small text-uppercase">
+                            <tr style="border-bottom: 2px solid rgba(0,0,0,0.05);">
+                                <th>Student</th>
+                                <th>Requested Slot</th>
+                                <th>Reason</th>
+                                <th class="text-end">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for req in pending_requests %}
+                            <tr>
+                                <td>
+                                    <div class="fw-bold text-dark">{{ req.student.user.first_name }}</div>
+                                    <div class="text-muted x-small" style="font-size: 0.75rem;">ID: {{ req.student.roll_number }}</div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-light text-primary border fw-medium">
+                                        {{ req.time_slot.label }}
+                                    </span>
+                                </td>
+                                <td class="text-muted small">{{ req.reason }}</td>
+                                <td class="text-end">
+                                    <form method="POST" style="display:inline;">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="approve_id" value="{{ req.id }}">
+                                        <button class="btn btn-success btn-sm px-3 rounded-pill fw-bold">Approve</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4" class="text-center py-5">
+                                    <div class="text-muted mb-2"><i class="bi bi-check2-circle display-4"></i></div>
+                                    <p class="fw-medium">No pending requests found!</p>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

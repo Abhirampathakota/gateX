@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="row g-4">
+    <div class="col-md-4">
+        <div class="glass-panel p-4 text-center">
+            <div class="mb-3">
+                <i class="bi bi-person-circle display-1" style="color: #4f46e5;"></i>
+            </div>
+            <h3 class="fw-bold" style="color: #1e293b;">{{ student.user.first_name }}</h3>
+            <p class="text-muted mb-1 fw-bold">{{ student.roll_number }}</p>
+            <p class="text-muted small">{{ student.department }}</p>
+            <hr>
+            <p class="small text-muted">Parent: {{ student.parent_name }}</p>
+            <a href="/logout/" class="btn btn-sm btn-outline-danger w-100 mt-2">Logout</a>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="glass-panel p-5 text-center" style="min-height: 400px; display:flex; flex-direction:column; justify-content:center;">
+            
+            {% if not visit or visit.status == 'COMPLETED' or visit.status == 'REJECTED' %}
+                <h2 class="fw-bold mb-4" style="color: #1e293b;">Request New Pass</h2>
+                
+                <form method="POST">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3 text-start">
+                        <label class="fw-bold small text-muted mb-1">Select Time Slot:</label>
+                        <select name="time_slot" class="form-control form-select" style="background:rgba(255,255,255,0.5); border:none; padding:12px;">
+                            {% for slot in available_slots %}
+                                <option value="{{ slot.id }}">{{ slot.label }} ({{ slot.start_time|time:"h:i A" }} - {{ slot.end_time|time:"h:i A" }})</option>
+                            {% empty %}
+                                <option disabled>No active slots available. Contact Admin.</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-4 text-start">
+                        <label class="fw-bold small text-muted mb-1">Reason:</label>
+                        <textarea name="reason" class="form-control" rows="2" placeholder="Buying books, Hospital, etc." style="background:rgba(255,255,255,0.5); border:none;"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary-soft w-100 py-3 fw-bold">Send Request ➔</button>
+                </form>
+
+            {% elif visit.status == 'PENDING' %}
+                <div class="display-1 mb-3" style="color: #f59e0b;"><i class="bi bi-hourglass-split"></i></div>
+                <h3 class="fw-bold text-dark">Approval Pending</h3>
+                <p class="text-muted">You requested: <strong>{{ visit.time_slot.label }}</strong></p>
+                <div class="alert alert-warning border-0 small d-inline-block">
+                    Please wait for admin approval.
+                </div>
+
+            {% elif visit.status == 'APPROVED' or visit.status == 'INSIDE' %}
+                <h6 class="text-success text-uppercase ls-2 fw-bold">Gate Pass Active</h6>
+                <h2 class="fw-bold mb-2">{{ visit.status }}</h2>
+                <p class="mb-4 text-primary fw-bold">{{ visit.time_slot.label }} ({{ visit.time_slot.start_time|time:"h:i A" }})</p>
+                
+                <div class="bg-white p-3 d-inline-block rounded-4 shadow-sm mb-3">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=http://{{ request.get_host }}/scan/{{ visit.id }}/" alt="QR Code" style="border-radius: 8px;">
+                </div>
+                <p class="small text-muted">Show this QR code at the security gate.</p>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
