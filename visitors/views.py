@@ -4,7 +4,20 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required 
 from django.utils import timezone
 # Import TimeSlot here
-from .models import Student, VisitRequest, TimeSlot 
+from .models import Student, VisitRequest, TimeSlot
+def home(request):
+    return render(request, 'home.html')
+# visitors/views.py
+from django.contrib.admin.views.decorators import staff_member_required
+
+@staff_member_required  # This replaces the need for a separate login button
+def admin(request):
+    pending_requests = VisitRequest.objects.filter(status='PENDING')
+    all_slots = TimeSlot.objects.all()
+    return render(request, 'admin.html', {
+        'pending_requests': pending_requests,
+        'all_slots': all_slots
+    }) 
 
 # 1. PARENT / STUDENT LOGIN (Keep as is)
 def parent_login(request):
