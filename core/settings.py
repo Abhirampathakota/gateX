@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-1@6&98j_0n)9vvt#6@5u&7l*tq84^gkw+8+0l_104q(_mqu=b(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['gatex-w9hs.onrender.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
